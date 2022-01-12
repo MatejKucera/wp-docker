@@ -14,10 +14,12 @@ services:
         ports:
             - $LOCAL_WORDPRESS_PORT:80
         labels:
-            traefik.frontend.rule: Host:${HOST:-rpwp.127.0.0.1.xip.io}
-            traefik.enable: 'true'
-            traefik.frontend.headers.STSSeconds: 31536000
-            traefik.frontend.headers.STSIncludeSubdomains: 'true'
+            - traefik.enable=true
+            - traefik.http.routers.rpwp.rule=Host(`$HOST`)
+            - traefik.http.routers.rpwp.entrypoints=websecure
+            - traefik.http.routers.rpwp.tls=true
+            - traefik.http.routers.rpwp.tls.certresolver=myresolver
+            - traefik.http.routers.rpwp.tls.options=mintls12@file
 
     db:
         image: mysql
